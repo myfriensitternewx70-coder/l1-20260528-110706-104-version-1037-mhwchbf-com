@@ -1,0 +1,9 @@
+(function(){
+const q=(s,p=document)=>p.querySelector(s),qa=(s,p=document)=>Array.from(p.querySelectorAll(s));
+qa('.menu-toggle').forEach(b=>b.addEventListener('click',()=>{const p=q('.mobile-panel');if(p)p.classList.toggle('is-open')}));
+const slides=qa('.hero-slide'),dots=qa('.hero-dot'),minis=qa('.hero-mini');let cur=0;
+function show(i){if(!slides.length)return;cur=(i+slides.length)%slides.length;slides.forEach((s,n)=>s.classList.toggle('is-active',n===cur));dots.forEach((d,n)=>d.classList.toggle('is-active',n===cur));minis.forEach((d,n)=>d.classList.toggle('is-active',n===cur))}
+dots.forEach((d,i)=>d.addEventListener('click',()=>show(i)));minis.forEach((d,i)=>d.addEventListener('click',()=>show(i)));if(slides.length){show(0);setInterval(()=>show(cur+1),5200)}
+qa('[data-scroll-target]').forEach(b=>b.addEventListener('click',()=>{const t=q(b.getAttribute('data-scroll-target'));if(t)t.scrollIntoView({behavior:'smooth',block:'start'})}));
+function bindFilter(scope){const root=scope||document;const input=q('.filter-input',root),region=q('.filter-region',root),year=q('.filter-year',root),type=q('.filter-type',root),cards=qa('.movie-card',root),empty=q('.empty-state',root);function apply(){const kw=(input&&input.value||'').trim().toLowerCase(),rv=region&&region.value||'',yv=year&&year.value||'',tv=type&&type.value||'';let any=false;cards.forEach(c=>{const txt=(c.dataset.key||'').toLowerCase(),ok=(!kw||txt.includes(kw))&&(!rv||c.dataset.region===rv)&&(!yv||c.dataset.year===yv)&&(!tv||c.dataset.type===tv);c.classList.toggle('hidden-card',!ok);if(ok)any=true});if(empty)empty.classList.toggle('is-visible',!any)}[input,region,year,type].forEach(x=>x&&x.addEventListener(x.tagName==='INPUT'?'input':'change',apply));apply()}bindFilter(document);
+})();
